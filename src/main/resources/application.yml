@@ -1,4 +1,6 @@
 spring:
+  mvc:
+    dispatch-options-request: true
   datasource:
     url: jdbc:mysql://localhost:3306/FinancialManagementSystemDB
     username: springuser
@@ -13,3 +15,8 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
