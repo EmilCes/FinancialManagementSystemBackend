@@ -16,17 +16,19 @@ public class Token {
 
     @Id
     @GeneratedValue
-    private Integer tokenId;
-    private String token;
+    public Integer tokenId;
+
+    @Column(unique = true)
+    public String token;
 
     @Enumerated(EnumType.STRING)
-    private TokenType tokenType;
+    public TokenType tokenType = TokenType.BEARER;
 
-    private boolean expired;
-    private boolean revoked;
+    public boolean expired;
+    public boolean revoked;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User user;
+    public User user;
 
 }

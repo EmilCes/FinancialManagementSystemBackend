@@ -1,4 +1,4 @@
-package com.softdev.fmsb.user;
+package com.softdev.fmsb.token;
 
 import com.softdev.fmsb.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
