@@ -23,9 +23,3 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 30 #604800000 #
-
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG

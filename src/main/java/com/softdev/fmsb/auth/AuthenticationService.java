@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softdev.fmsb.config.JwtService;
 import com.softdev.fmsb.token.Token;
 import com.softdev.fmsb.token.TokenType;
-import com.softdev.fmsb.user.Role;
 import com.softdev.fmsb.token.TokenRepository;
 import com.softdev.fmsb.user.User;
 import com.softdev.fmsb.user.UserRepository;
@@ -36,7 +35,7 @@ public class AuthenticationService {
                 .lastName(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(request.getRole())
                 .build();
 
         var savedUser = userRepository.save(user);
