@@ -1,17 +1,23 @@
-package com.softdev.fmsb.auth;
+package com.softdev.fmsb.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softdev.fmsb.config.JwtService;
-import com.softdev.fmsb.token.Token;
-import com.softdev.fmsb.token.TokenType;
-import com.softdev.fmsb.token.TokenRepository;
-import com.softdev.fmsb.user.User;
-import com.softdev.fmsb.user.UserRepository;
+import com.softdev.fmsb.auth.infraestructure.AuthenticationController;
+import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationRequest;
+import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
+import com.softdev.fmsb.auth.infraestructure.dto.VerificationRequest;
+import com.softdev.fmsb.auth.infraestructure.dto.VerificationResponse;
+import com.softdev.fmsb.auth.model.Token;
+import com.softdev.fmsb.auth.model.TokenType;
+import com.softdev.fmsb.auth.infraestructure.TokenRepository;
+import com.softdev.fmsb.auth.model.User;
+import com.softdev.fmsb.auth.infraestructure.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +33,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TwoFactorAuthenticationService tfaService;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationController.AuthenticationResponse register(RegisterRequest request) {
 
         User user = User.builder()
                 .firstName(request.getFirstname())
@@ -36,7 +43,13 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .mfaEnabled(request.isMfaEnabled())
                 .build();
+
+        //if MFA enabled -> Generate Secret
+        if(request.isMfaEnabled()) {
+            user.setSecret(tfaService.generateNewSecret());
+        }
 
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -44,13 +57,15 @@ public class AuthenticationService {
 
         saveUserToken(savedUser, jwtToken);
 
-        return AuthenticationResponse.builder()
+        return AuthenticationController.AuthenticationResponse.builder()
+                .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .mfaEnabled(user.isMfaEnabled())
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationController.AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -62,17 +77,55 @@ public class AuthenticationService {
         var user = userRepository.findUserByEmail(request.getEmail())
                 .orElseThrow();
 
+        if (user.isMfaEnabled()) {
+            return AuthenticationController.AuthenticationResponse.builder()
+                    .accessToken("")
+                    .refreshToken("")
+                    .mfaEnabled(true)
+                    .build();
+        }
+
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse.builder()
+        return AuthenticationController.AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .mfaEnabled(false)
                 .build();
 
+    }
+
+    public AuthenticationController.AuthenticationResponse updateMfaEnabled(AuthenticationRequest request){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        var user = userRepository.findUserByEmail(request.getEmail())
+                .orElseThrow();
+
+        user.setMfaEnabled(true);
+        user.setSecret(tfaService.generateNewSecret());
+
+
+        var savedUser = userRepository.save(user);
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        saveUserToken(savedUser, jwtToken);
+
+        return AuthenticationController.AuthenticationResponse.builder()
+                .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .mfaEnabled(user.isMfaEnabled())
+                .build();
     }
 
     private void revokeAllUserTokens(User user) {
@@ -124,13 +177,34 @@ public class AuthenticationService {
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
 
-                var authResponse = AuthenticationResponse.builder()
+                var authResponse = AuthenticationController.AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
+                        .mfaEnabled(false)
                         .build();
 
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    public VerificationResponse verifyCode(VerificationRequest verificationRequest) {
+        User user = userRepository.findUserByEmail(verificationRequest.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("No user found with %S", verificationRequest.getEmail()))
+                );
+
+        if (tfaService.isOtpNotValid(user.getSecret(), verificationRequest.getCode())) {
+            throw new BadCredentialsException("Code is not correct");
+        }
+
+        var jwtToken = jwtService.generateToken(user);
+
+        return VerificationResponse.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .accessToken(jwtToken)
+                .role(user.getRole())
+                .build();
     }
 }

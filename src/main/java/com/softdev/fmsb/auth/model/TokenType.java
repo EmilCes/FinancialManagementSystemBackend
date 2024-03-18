@@ -1,4 +1,4 @@
-package com.softdev.fmsb.token;
+package com.softdev.fmsb.auth.model;
 
 public enum TokenType {
 

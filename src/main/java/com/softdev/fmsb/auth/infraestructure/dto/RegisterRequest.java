@@ -1,6 +1,6 @@
-package com.softdev.fmsb.auth;
+package com.softdev.fmsb.auth.infraestructure.dto;
 
-import com.softdev.fmsb.user.Role;
+import com.softdev.fmsb.auth.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +17,6 @@ public class RegisterRequest {
     private String email;
     private String password;
     private Role role;
+    private boolean mfaEnabled;
 
 }

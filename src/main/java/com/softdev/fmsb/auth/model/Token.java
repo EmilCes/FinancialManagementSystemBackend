@@ -1,6 +1,5 @@
-package com.softdev.fmsb.token;
+package com.softdev.fmsb.auth.model;
 
-import com.softdev.fmsb.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

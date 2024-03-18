@@ -1,4 +1,4 @@
-package com.softdev.fmsb.auth;
+package com.softdev.fmsb.auth.infraestructure.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,11 +1,7 @@
-package com.softdev.fmsb.user;
+package com.softdev.fmsb.auth.model;
 
-import com.softdev.fmsb.token.Token;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -27,6 +23,8 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+    private boolean mfaEnabled;
+    private String secret;
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -1,4 +1,4 @@
-package com.softdev.fmsb.user;
+package com.softdev.fmsb.auth.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

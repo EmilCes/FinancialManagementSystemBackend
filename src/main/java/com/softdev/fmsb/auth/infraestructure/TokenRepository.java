@@ -1,5 +1,6 @@
-package com.softdev.fmsb.token;
+package com.softdev.fmsb.auth.infraestructure;
 
+import com.softdev.fmsb.auth.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

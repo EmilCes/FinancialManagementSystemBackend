@@ -1,4 +1,4 @@
-package com.softdev.fmsb.user;
+package com.softdev.fmsb.auth.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.softdev.fmsb.user.Permission.*;
+import static com.softdev.fmsb.auth.model.Permission.*;
 
 @Getter
 @RequiredArgsConstructor

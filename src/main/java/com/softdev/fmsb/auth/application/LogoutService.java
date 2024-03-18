@@ -1,6 +1,6 @@
-package com.softdev.fmsb.config;
+package com.softdev.fmsb.auth.application;
 
-import com.softdev.fmsb.token.TokenRepository;
+import com.softdev.fmsb.auth.infraestructure.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

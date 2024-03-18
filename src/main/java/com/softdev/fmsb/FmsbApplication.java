@@ -1,8 +1,8 @@
 package com.softdev.fmsb;
 
-import com.softdev.fmsb.auth.AuthenticationService;
-import com.softdev.fmsb.auth.RegisterRequest;
-import com.softdev.fmsb.user.Role;
+import com.softdev.fmsb.auth.application.AuthenticationService;
+import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
+import com.softdev.fmsb.auth.model.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

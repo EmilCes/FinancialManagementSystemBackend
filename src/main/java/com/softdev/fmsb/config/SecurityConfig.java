@@ -1,5 +1,6 @@
 package com.softdev.fmsb.config;
 
+import com.softdev.fmsb.auth.application.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.softdev.fmsb.user.Permission.*;
-import static com.softdev.fmsb.user.Role.ADMIN;
-import static com.softdev.fmsb.user.Role.MANAGER;
+import static com.softdev.fmsb.auth.model.Permission.*;
+import static com.softdev.fmsb.auth.model.Role.ADMIN;
+import static com.softdev.fmsb.auth.model.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 

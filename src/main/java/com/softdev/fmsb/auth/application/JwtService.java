@@ -1,4 +1,4 @@
-package com.softdev.fmsb.config;
+package com.softdev.fmsb.auth.application;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

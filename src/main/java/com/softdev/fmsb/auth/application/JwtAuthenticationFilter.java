@@ -1,6 +1,6 @@
-package com.softdev.fmsb.config;
+package com.softdev.fmsb.auth.application;
 
-import com.softdev.fmsb.token.TokenRepository;
+import com.softdev.fmsb.auth.infraestructure.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

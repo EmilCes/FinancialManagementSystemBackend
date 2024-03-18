@@ -1,5 +1,6 @@
-package com.softdev.fmsb.user;
+package com.softdev.fmsb.auth.infraestructure;
 
+import com.softdev.fmsb.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
