@@ -3,6 +3,7 @@ package com.softdev.fmsb.auth.infraestructure;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.softdev.fmsb.auth.application.AuthenticationService;
 import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationRequest;
+import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationResponse;
 import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
 import com.softdev.fmsb.auth.infraestructure.dto.VerificationRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +24,6 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request){
         var response = authenticationService.register(request);
-
-        /*if (request.isMfaEnabled()) {
-            return ResponseEntity.ok(response);
-        }
-
-        return ResponseEntity.accepted().build();*/
         return ResponseEntity.ok(response);
     }
 
@@ -52,17 +47,5 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.updateMfaEnabled(request ));
     }
 
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_EMPTY) //If 2fa is not enabled, json will not return secretImageUri empty
-    public static class AuthenticationResponse {
 
-        private String accessToken;
-        private String refreshToken;
-        private boolean mfaEnabled;
-        private String secretImageUri;
-
-    }
 }
