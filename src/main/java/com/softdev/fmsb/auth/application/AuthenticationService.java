@@ -2,10 +2,7 @@ package com.softdev.fmsb.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softdev.fmsb.auth.infraestructure.AuthenticationController;
-import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationRequest;
-import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
-import com.softdev.fmsb.auth.infraestructure.dto.VerificationRequest;
-import com.softdev.fmsb.auth.infraestructure.dto.VerificationResponse;
+import com.softdev.fmsb.auth.infraestructure.dto.*;
 import com.softdev.fmsb.auth.model.Token;
 import com.softdev.fmsb.auth.model.TokenType;
 import com.softdev.fmsb.auth.infraestructure.TokenRepository;
@@ -35,7 +32,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TwoFactorAuthenticationService tfaService;
 
-    public AuthenticationController.AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) {
 
         User user = User.builder()
                 .firstName(request.getFirstname())
@@ -57,7 +54,7 @@ public class AuthenticationService {
 
         saveUserToken(savedUser, jwtToken);
 
-        return AuthenticationController.AuthenticationResponse.builder()
+        return AuthenticationResponse.builder()
                 .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -65,7 +62,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationController.AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -78,7 +75,7 @@ public class AuthenticationService {
                 .orElseThrow();
 
         if (user.isMfaEnabled()) {
-            return AuthenticationController.AuthenticationResponse.builder()
+            return AuthenticationResponse.builder()
                     .accessToken("")
                     .refreshToken("")
                     .mfaEnabled(true)
@@ -91,7 +88,7 @@ public class AuthenticationService {
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationController.AuthenticationResponse.builder()
+        return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .mfaEnabled(false)
@@ -99,7 +96,7 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationController.AuthenticationResponse updateMfaEnabled(AuthenticationRequest request){
+    public AuthenticationResponse updateMfaEnabled(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -120,7 +117,7 @@ public class AuthenticationService {
 
         saveUserToken(savedUser, jwtToken);
 
-        return AuthenticationController.AuthenticationResponse.builder()
+        return AuthenticationResponse.builder()
                 .secretImageUri(tfaService.generateQrCodeImageUri(user.getSecret()))
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -177,7 +174,7 @@ public class AuthenticationService {
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
 
-                var authResponse = AuthenticationController.AuthenticationResponse.builder()
+                var authResponse = AuthenticationResponse.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .mfaEnabled(false)
