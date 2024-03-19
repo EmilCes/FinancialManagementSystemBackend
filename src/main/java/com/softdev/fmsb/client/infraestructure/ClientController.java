@@ -2,6 +2,8 @@ package com.softdev.fmsb.client.infraestructure;
 
 import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
 import com.softdev.fmsb.client.application.ClientService;
+import com.softdev.fmsb.client.infraestructure.dto.VerifyClientExistenceRequest;
+import com.softdev.fmsb.client.infraestructure.dto.VerifyClientExistenceResponse;
 import com.softdev.fmsb.client.model.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,17 @@ public class ClientController {
         try{
             clientService.registerClient(client);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/verify-existence")
+    public ResponseEntity<?> verifyClientExistence(@RequestBody VerifyClientExistenceRequest request) {
+        try {
+            VerifyClientExistenceResponse verifyClientExistenceResponse = clientService.verifyClientExistence(request);
+            return ResponseEntity.ok(verifyClientExistenceResponse);
         } catch (Exception e) {
             //TODO: Log exception
             return ResponseEntity.badRequest().build();
