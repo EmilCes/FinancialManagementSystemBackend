@@ -21,8 +21,8 @@ public class Credit {
     @GeneratedValue
     private Integer creditId;
     private String description;
-    //private String creditId;
-    //private String creditId;
-    //private String creditId;
+    private float interestRate;
+    private String term;
+    private float iva;
 
 }
