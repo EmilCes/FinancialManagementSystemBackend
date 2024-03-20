@@ -44,6 +44,4 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BankAccount> bankAccounts;
-
-
 }
