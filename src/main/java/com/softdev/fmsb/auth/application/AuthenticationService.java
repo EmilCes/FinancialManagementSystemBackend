@@ -83,15 +83,12 @@ public class AuthenticationService {
         }
 
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 
         return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .mfaEnabled(false)
+                .mfaEnabled(user.isMfaEnabled())
                 .build();
 
     }
