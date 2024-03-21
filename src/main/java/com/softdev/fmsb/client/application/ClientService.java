@@ -23,7 +23,9 @@ public class ClientService {
     }
 
     public void registerClient(Client client) {
-        clientRepository.save(client);
+        if (!clientRepository.existsClientByRfc(client.getRfc())){
+            clientRepository.save(client);
+        }
     }
 
     public VerifyClientExistenceResponse verifyClientExistence(VerifyClientExistenceRequest verifyClientExistenceRequest) {
