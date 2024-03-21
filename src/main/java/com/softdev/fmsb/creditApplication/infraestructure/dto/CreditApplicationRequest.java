@@ -1,7 +1,7 @@
 package com.softdev.fmsb.creditApplication.infraestructure.dto;
 
-import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.creditApplication.model.Reference;
+import com.softdev.fmsb.creditType.model.CreditType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,14 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreditAplicationRequest
+public class CreditApplicationRequest
 {
     private String clientRfc;
-    private Credit selectedCredit;
+    private CreditType selectedCredit;
     private Reference firstReference;
     private Reference secondReference;
-    /*private byte[] IdentificationPdf;
-    private byte[] moneyComprobantPdf;
-    private byte[] locationComprobantPdf;
-     */
+    private byte[] identificationPdf;
+    private byte[] proofOfIncomePdf;
+    private byte[] proofOfAddressPdf;
 }

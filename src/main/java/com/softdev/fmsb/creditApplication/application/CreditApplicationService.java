@@ -8,7 +8,6 @@ import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClien
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Var;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +19,17 @@ public class CreditApplicationService {
     private final CreditApplicationRepository creditApplicationRepository;
     private final ClientRepository clientRepository;
 
-    public List<CreditApplication> GetAllCreditApplication(){
+    public List<CreditApplication> getAllCreditApplication(){
         return creditApplicationRepository.findAll();
     }
 
-    public void CreateCreditApplication(CreditApplication creditApplication) {
-        Client client = clientRepository.findClientByRfc(creditApplication.getCreditApplicant().getRfc()).get();
-        creditApplication.setCreditApplicant(client);
+    public void createCreditApplication(CreditApplication creditApplication) {
         creditApplicationRepository.save(creditApplication);
+    }
+
+    public Client getClientByRfc(String rfc){
+        Client client = clientRepository.findClientByRfc(rfc).get();
+        return client;
     }
 
     public VerifyRegularClientResponse verifyRegularClientResponse (VerifyClientRequest verifyClientRequest){
