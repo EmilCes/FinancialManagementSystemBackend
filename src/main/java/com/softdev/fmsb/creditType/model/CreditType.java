@@ -23,7 +23,7 @@ public class CreditType {
     private Integer creditTypeId;
     private String description;
     private float interestRate;
-    private String state;
+    private CreditState state;
     private String term;
     private float iva;
 
