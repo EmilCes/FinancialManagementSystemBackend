@@ -34,7 +34,7 @@ public class CreditApplicationService {
 
     public VerifyRegularClientResponse verifyRegularClientResponse (VerifyClientRequest verifyClientRequest){
         Client client = clientRepository.findClientByRfc(verifyClientRequest.getRfc()).get();
-        boolean isNotRegularClient = creditApplicationRepository.existsCreditApplicationByCreditApplicantAndStatus(client, CreditApplicationStatus.ACCEPTED);
+        boolean isNotRegularClient = creditApplicationRepository.existsCreditApplicationByCreditApplicantAndStatus(client, CreditApplicationStatus.ACTIVE);
         return new VerifyRegularClientResponse(!isNotRegularClient);
     }
 }

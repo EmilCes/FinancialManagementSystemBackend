@@ -2,10 +2,7 @@ package com.softdev.fmsb.client.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
@@ -44,4 +41,11 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BankAccount> bankAccounts;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "name='" + name +
+                '}';
+    }
 }
