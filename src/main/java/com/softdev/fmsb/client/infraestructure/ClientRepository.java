@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
     boolean existsClientByRfc(String rfc);
+
+    Optional<Client> findClientByRfc(String rfc);
 }

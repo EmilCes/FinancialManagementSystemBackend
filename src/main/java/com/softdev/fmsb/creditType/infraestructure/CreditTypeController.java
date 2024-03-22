@@ -26,6 +26,17 @@ public class CreditTypeController {
         }
     }
 
+    @GetMapping("/getActive")
+    public ResponseEntity<?> getCreditsTypesByActiveStatus (){
+        try {
+            List<CreditType> response = creditTypeService.getActiveCreditTypes();
+            return ResponseEntity.ok(response);
+        } catch (Exception e){
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerCredit(@RequestBody CreditType creditType){
         try{
