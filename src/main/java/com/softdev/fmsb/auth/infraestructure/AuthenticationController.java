@@ -6,6 +6,7 @@ import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationRequest;
 import com.softdev.fmsb.auth.infraestructure.dto.AuthenticationResponse;
 import com.softdev.fmsb.auth.infraestructure.dto.RegisterRequest;
 import com.softdev.fmsb.auth.infraestructure.dto.VerificationRequest;
+import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClientResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.*;
@@ -47,5 +48,37 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.updateMfaEnabled(request ));
     }
 
+    @PostMapping("/verify-email")
+    public ResponseEntity<?> verifyEmail(String email){
+        try {
+            boolean isEmailRegistered = authenticationService.verifyEmail(email);
+            return ResponseEntity.ok(isEmailRegistered);
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/verify-password-code")
+    public ResponseEntity<?> verifyPasswordCode(@RequestBody VerificationRequest verificationRequest){
+        try {
+            boolean isCodeValid = authenticationService.verifyPasswordCode(verificationRequest);
+            return ResponseEntity.ok(isCodeValid);
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody AuthenticationRequest authenticationRequest){
+        try {
+            boolean isPasswordChanged = authenticationService.changePassword(authenticationRequest);
+            return ResponseEntity.ok(isPasswordChanged);
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }

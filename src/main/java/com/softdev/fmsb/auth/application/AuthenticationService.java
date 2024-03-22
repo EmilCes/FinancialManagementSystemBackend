@@ -2,6 +2,7 @@ package com.softdev.fmsb.auth.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softdev.fmsb.auth.infraestructure.AuthenticationController;
+import com.softdev.fmsb.auth.infraestructure.EmailSender;
 import com.softdev.fmsb.auth.infraestructure.dto.*;
 import com.softdev.fmsb.auth.model.Token;
 import com.softdev.fmsb.auth.model.TokenType;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -200,5 +202,55 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .role(user.getRole())
                 .build();
+    }
+
+    public boolean verifyEmail(String email) {
+        Optional<User> optionalUser = userRepository.findUserByEmail(email);
+
+        boolean isEmailRegistered = optionalUser.isPresent();
+
+        if (isEmailRegistered){
+
+            var randomCode = RandomCodeGenerator.generateRandomCode();
+            String subject = "Código De Recuperación FMS";
+
+            EmailSender emailSender = new EmailSender();
+            emailSender.sendEmail(email, subject, randomCode);
+
+            User user = optionalUser.get();
+            user.setChangePasswordCode(randomCode);
+
+            userRepository.save(user);
+        }
+
+        return isEmailRegistered;
+    }
+
+    public boolean verifyPasswordCode(VerificationRequest verificationRequest){
+        Optional<User> optionalUser = userRepository.findUserByEmail(verificationRequest.getEmail());
+
+        boolean isEmailRegistered = optionalUser.isPresent();
+        boolean isCodeValid = false;
+
+        if(isEmailRegistered){
+            User user = optionalUser.get();
+            isCodeValid = user.getChangePasswordCode().equals(verificationRequest.getCode());
+        }
+
+        return isEmailRegistered && isCodeValid;
+    }
+
+    public boolean changePassword(AuthenticationRequest authenticationRequest){
+        Optional<User> optionalUser = userRepository.findUserByEmail(authenticationRequest.getEmail());
+
+        boolean isEmailRegistered = optionalUser.isPresent();
+
+        if(isEmailRegistered){
+            User user = optionalUser.get();
+            user.setPassword(passwordEncoder.encode(authenticationRequest.getPassword()));
+            userRepository.save(user);
+        }
+
+        return isEmailRegistered;
     }
 }
