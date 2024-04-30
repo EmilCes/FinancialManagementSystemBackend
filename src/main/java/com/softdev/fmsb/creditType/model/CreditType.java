@@ -29,7 +29,7 @@ public class CreditType {
 
     @ManyToMany
     @JoinTable(
-            name = "CreditType_Politic",
+            name = "CreditTypes_Politics",
             joinColumns = @JoinColumn(name = "creditTypeId"),
             inverseJoinColumns = @JoinColumn(name = "politicId")
     )
