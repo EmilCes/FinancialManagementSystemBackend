@@ -29,6 +29,21 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getClientById(@PathVariable Integer id) {
+        try{
+            Client response = clientService.getClientById(id);
+            if (response != null) {
+                return ResponseEntity.ok(response);
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerClient(@RequestBody Client client){
         try{
@@ -45,6 +60,21 @@ public class ClientController {
         try {
             VerifyClientExistenceResponse verifyClientExistenceResponse = clientService.verifyClientExistence(request);
             return ResponseEntity.ok(verifyClientExistenceResponse);
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateClient(@PathVariable Integer id, @RequestBody Client clientUpdated) {
+        try{
+            Client response = clientService.updateClient(id, clientUpdated);
+            if (response != null) {
+                return ResponseEntity.ok(response);
+            } else{
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             //TODO: Log exception
             return ResponseEntity.badRequest().build();
