@@ -27,8 +27,6 @@ public class CreditType {
     private String term;
     private float iva;
 
-    // Evitar que se serialice la lista de políticas
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "CreditTypes_Politics",
