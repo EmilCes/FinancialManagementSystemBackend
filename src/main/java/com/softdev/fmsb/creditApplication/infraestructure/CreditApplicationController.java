@@ -99,7 +99,6 @@ public class CreditApplicationController {
         }
     }
 
-
     private String savePdf(byte[] bytesPDF, String fileName, String rfc) {
         try {
             LocalDate currentDate = LocalDate.now();

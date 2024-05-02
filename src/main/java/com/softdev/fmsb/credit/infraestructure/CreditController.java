@@ -6,10 +6,7 @@ import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.credit.model.CreditResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,6 +41,11 @@ public class CreditController {
             //TODO: Log exception
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<?> validateCreditApplication( ) {
+        return ResponseEntity.ok().build();
     }
 
 }
