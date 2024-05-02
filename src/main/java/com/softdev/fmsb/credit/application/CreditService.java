@@ -8,6 +8,8 @@ import com.softdev.fmsb.credit.model.*;
 import com.softdev.fmsb.creditApplication.infraestructure.CreditApplicationRepository;
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
+import com.softdev.fmsb.politics.infraestructure.PoliticRepository;
+import com.softdev.fmsb.politics.model.Politic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class CreditService {
 
     private final CreditRepository creditRepository;
     private final DictumRepository dictumRepository;
+    private final PoliticRepository politicRepository;
     private final CreditApplicationRepository creditApplicationRepository;
     private final UserRepository userRepository;
 
@@ -54,41 +57,58 @@ public class CreditService {
     }
 
     public void validateCreditApplication(ValidateCreditApplicationRequest validateCreditApplicationRequest) {
-
+        // Verificar si se han rechazado políticas
         boolean notDeniedPolitics = validateCreditApplicationRequest.getRejectedPolicies().isEmpty();
-        System.out.println(notDeniedPolitics);
 
+        // Obtener la solicitud de crédito y el usuario asociado
         Optional<CreditApplication> optionalCreditApplication = creditApplicationRepository.findById(validateCreditApplicationRequest.getCreditApplicationId());
-        Optional<User> user = userRepository.findById(validateCreditApplicationRequest.getUserId());
+        Optional<User> optionalUser = userRepository.findById(validateCreditApplicationRequest.getUserId());
 
-        CreditApplication creditApplication = optionalCreditApplication.get();
+        if (optionalCreditApplication.isPresent() && optionalUser.isPresent()) {
+            CreditApplication creditApplication = optionalCreditApplication.get();
+            User user = optionalUser.get();
 
-        Dictum dictum = Dictum.builder()
-                .creditApplication(creditApplication)
-                .comments(validateCreditApplicationRequest.getComments())
-                .deniedPolitics(validateCreditApplicationRequest.getRejectedPolicies())
-                .user(user.get())
-                .build();
+            // Obtener las entidades Politic correspondientes a los IDs proporcionados en el JSON
+            List<Politic> deniedPolitics = new ArrayList<>();
+            for (Politic rejectedPolicy : validateCreditApplicationRequest.getRejectedPolicies()) {
+                Integer politicId = rejectedPolicy.getPoliticId();
+                Optional<Politic> optionalPolitic = politicRepository.findById(politicId);
+                optionalPolitic.ifPresent(deniedPolitics::add);
+            }
 
-        Dictum dictumRegistered = dictumRepository.save(dictum);
-
-        if (notDeniedPolitics) {
-            Credit credit = Credit.builder()
-                    .startDate(getCurrentDate())
-                    .status(CreditStatus.ACTIVE)
+            // Crear y guardar un dictamen
+            Dictum dictum = Dictum.builder()
                     .creditApplication(creditApplication)
+                    .comments(validateCreditApplicationRequest.getComments())
+                    .deniedPolitics(deniedPolitics)  // Asignar las políticas rechazadas
+                    .user(user)
                     .build();
+            Dictum dictumRegistered = dictumRepository.save(dictum);
 
-            Credit creditRegistered = creditRepository.save(credit);
+            // Si no se han rechazado políticas, crear y guardar un nuevo crédito
+            if (notDeniedPolitics) {
+                Credit credit = Credit.builder()
+                        .startDate(new Date())
+                        .status(CreditStatus.ACTIVE)
+                        .creditApplication(creditApplication)
+                        .build();
+                Credit creditRegistered = creditRepository.save(credit);
 
-            creditApplication.setCredit(creditRegistered);
+                // Asignar el crédito a la solicitud de crédito
+                creditApplication.setCredit(creditRegistered);
+            }
+
+            // Actualizar el estado de la solicitud de crédito y asociar el dictamen
+            creditApplication.setDictum(dictumRegistered);
+            creditApplication.setStatus(notDeniedPolitics ? CreditApplicationStatus.ACTIVE : CreditApplicationStatus.DENIED);
+            creditApplicationRepository.save(creditApplication);
+        } else {
+            // Manejar el caso en que no se encuentre la solicitud de crédito o el usuario
+            throw new IllegalArgumentException("Credit application or user not found");
         }
-
-        creditApplication.setDictum(dictumRegistered);
-        creditApplication.setStatus(notDeniedPolitics ? CreditApplicationStatus.ACTIVE : CreditApplicationStatus.DENIED);
-
-        creditApplicationRepository.save(creditApplication);
     }
+
+
 
     private static Date getCurrentDate() {
         java.util.Date utilDate = new java.util.Date();
