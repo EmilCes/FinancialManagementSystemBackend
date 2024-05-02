@@ -8,6 +8,7 @@ import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClien
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
 import com.softdev.fmsb.creditApplication.model.Reference;
+import com.softdev.fmsb.creditType.infraestructure.CreditTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ import java.io.File;
 public class CreditApplicationController {
 
     private final CreditApplicationService creditApplicationService;
+    private final CreditTypeRepository creditTypeRepository;
     private final String IDENTIFICATION_FILE = "identificacion";
     private final String PROOF_OF_INCOME_FILE = "comprobanteIngreso";
     private final String PROOF_OF_ADDRESS_FILE = "comprobanteDomicilio";
@@ -86,6 +88,7 @@ public class CreditApplicationController {
     }
 
     private CreditApplication convertCreditApplicationRequestToDto (CreditApplicationRequest creditApplicationRequest){
+
         CreditApplication creditApplication = new CreditApplication();
 
         String clientRfc = creditApplicationRequest.getClientRfc();
@@ -101,7 +104,7 @@ public class CreditApplicationController {
         creditApplication.setIdentificationPdfPath(savePdf(creditApplicationRequest.getIdentificationPdf(),IDENTIFICATION_FILE, clientRfc));
         creditApplication.setProofOfAddressPdfPath(savePdf(creditApplicationRequest.getProofOfAddressPdf(), PROOF_OF_ADDRESS_FILE, clientRfc));
         creditApplication.setProofOfIncomePdfPath(savePdf(creditApplicationRequest.getProofOfIncomePdf(), PROOF_OF_INCOME_FILE, clientRfc));
-        creditApplication.setSelectedCredit(creditApplicationRequest.getSelectedCredit());
+        creditApplication.setSelectedCredit(creditTypeRepository.findById(creditApplication.getIdCreditType()).get());
 
         try{
             creditApplication.setCreditApplicant(creditApplicationService.getClientByRfc(clientRfc));

@@ -40,8 +40,6 @@ public class CreditApplicationService {
         savedCreditApplication.setReferences(references);
 
         creditApplicationRepository.save(savedCreditApplication);
-
-
     }
 
 

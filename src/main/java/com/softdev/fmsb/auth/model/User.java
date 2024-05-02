@@ -1,5 +1,7 @@
 package com.softdev.fmsb.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.softdev.fmsb.credit.model.Dictum;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +30,10 @@ public class User implements UserDetails {
     private boolean mfaEnabled;
     private String secret;
     private String changePasswordCode;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "user")
+    @JsonManagedReference
+    private List<Dictum> dictums;
 
     @Enumerated(EnumType.STRING)
     private Role role;
