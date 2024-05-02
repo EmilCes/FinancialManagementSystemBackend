@@ -31,16 +31,13 @@ public class WorkerService {
     private final boolean SUCCESFUL = true;
     private final boolean UNSUCCESFUL = false;
 
-    public GetAllUsersResponse getAllUsers(){
+    public List<UserEssentials> getAllUsers(){
         List <User> users = userRepository.findAll();
-        GetAllUsersResponse response = GetAllUsersResponse.builder()
-                .users( users.stream()
-                        .map(user -> new UserEssentials(user.getFirstName(), user.getLastName(), user.getRfc()))
-                        .collect(Collectors.toList()))
-                .build();
+        List<UserEssentials> userEssentialsList = users.stream()
+                .map(user -> new UserEssentials(user.getFirstName(), user.getLastName(), user.getRfc()))
+                .collect(Collectors.toList());
 
-
-        return response;
+        return userEssentialsList;
     }
 
     public GetUserResponse getUser(String rfc) {
