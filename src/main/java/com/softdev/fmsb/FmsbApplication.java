@@ -15,7 +15,7 @@ public class FmsbApplication {
 		SpringApplication.run(FmsbApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner commandLineRunner(AuthenticationService service) {
 
 		return args -> {
@@ -38,6 +38,6 @@ public class FmsbApplication {
 			System.out.println("Manager token: "  + service.register(manager).getAccessToken());
 		};
 
-	}
+	}*/
 
 }
