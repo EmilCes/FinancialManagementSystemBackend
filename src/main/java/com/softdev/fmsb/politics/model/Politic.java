@@ -25,4 +25,8 @@ public class Politic {
     @ManyToMany(mappedBy = "politics")
     @JsonIgnoreProperties("politics")
     private List<CreditType> creditTypes;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dictumId", referencedColumnName = "dictumId")
+    private CreditType dictum;
 }

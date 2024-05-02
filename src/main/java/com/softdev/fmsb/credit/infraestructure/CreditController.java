@@ -4,6 +4,7 @@ import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.credit.application.CreditService;
 import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.credit.model.CreditResponse;
+import com.softdev.fmsb.credit.model.ValidateCreditApplicationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +45,14 @@ public class CreditController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<?> validateCreditApplication( ) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> validateCreditApplication(@RequestBody ValidateCreditApplicationRequest validateCreditApplicationRequest) {
+        try{
+            creditService.validateCreditApplication(validateCreditApplicationRequest);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

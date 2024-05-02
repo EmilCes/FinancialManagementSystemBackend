@@ -1,12 +1,16 @@
 package com.softdev.fmsb.credit.model;
 
-import com.softdev.fmsb.client.model.Client;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.softdev.fmsb.auth.model.User;
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
+import com.softdev.fmsb.politics.model.Politic;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -20,7 +24,15 @@ public class Dictum {
     @GeneratedValue
     private Integer dictumId;
 
-    // Here your attributes
+    private String comments;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
+
+    @OneToMany(cascade = CascadeType.ALL ,mappedBy = "dictum")
+    @JsonManagedReference
+    private List<Politic> deniedPolitics;
 
     @OneToOne
     @JoinColumn(name = "creditApplicationId")
