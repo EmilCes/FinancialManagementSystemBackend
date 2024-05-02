@@ -1,5 +1,6 @@
 package com.softdev.fmsb.politics.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.softdev.fmsb.credit.model.Dictum;
 import com.softdev.fmsb.creditType.model.CreditType;
@@ -24,9 +25,10 @@ public class Politic {
     private String state;
 
     @ManyToMany(mappedBy = "politics")
-    @JsonIgnoreProperties("politics")
+    @JsonIgnore
     private List<CreditType> creditTypes;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Dictum dictum;
 }
