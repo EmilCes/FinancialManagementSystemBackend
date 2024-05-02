@@ -60,11 +60,11 @@ public class CreditController {
     @PostMapping("/")
     public ResponseEntity<?> validateCreditApplication(@RequestBody ValidateCreditApplicationRequest validateCreditApplicationRequest) {
         try{
-            System.out.println(validateCreditApplicationRequest.getComments());
             creditService.validateCreditApplication(validateCreditApplicationRequest);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             //TODO: Log exception
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
