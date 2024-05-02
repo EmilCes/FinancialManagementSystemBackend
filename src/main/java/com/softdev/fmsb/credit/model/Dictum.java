@@ -1,6 +1,7 @@
 package com.softdev.fmsb.credit.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softdev.fmsb.auth.model.User;
@@ -35,6 +36,7 @@ public class Dictum {
 
     @OneToMany(cascade = CascadeType.ALL ,mappedBy = "dictum")
     @JsonManagedReference
+    @JsonIgnore
     private List<Politic> deniedPolitics;
 
     @OneToOne
