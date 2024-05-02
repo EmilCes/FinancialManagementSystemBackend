@@ -1,7 +1,6 @@
 package com.softdev.fmsb.creditApplication.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.softdev.fmsb.client.model.Address;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.credit.model.Dictum;
@@ -31,6 +30,7 @@ public class CreditApplication {
     private String identificationPdfPath;
     private String proofOfAddressPdfPath;
     private String proofOfIncomePdfPath;
+    private int idCreditType;
 
     @Temporal(TemporalType.DATE)
     private Date dateOfApplication;
@@ -44,9 +44,10 @@ public class CreditApplication {
     private Credit credit;
 
     @OneToMany(cascade = CascadeType.ALL ,mappedBy = "creditApplication")
-    @JsonManagedReference
     private List<Reference> references;
 
+    // Evitar que se serialice la referencia a CreditType
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creditTypeId", referencedColumnName = "creditTypeId")
     private CreditType selectedCredit;
