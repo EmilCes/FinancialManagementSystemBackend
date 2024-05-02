@@ -1,5 +1,6 @@
 package com.softdev.fmsb.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softdev.fmsb.credit.model.Dictum;
 import jakarta.persistence.*;
@@ -33,6 +34,7 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "user")
     @JsonManagedReference
+    @JsonIgnore
     private List<Dictum> dictums;
 
     @Enumerated(EnumType.STRING)

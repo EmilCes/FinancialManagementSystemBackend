@@ -8,6 +8,8 @@ import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClien
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
 import com.softdev.fmsb.creditApplication.model.Reference;
+import com.softdev.fmsb.creditType.infraestructure.CreditTypeRepository;
+import com.softdev.fmsb.creditType.model.CreditType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class CreditApplicationService {
 
     private final CreditApplicationRepository creditApplicationRepository;
+    private final CreditTypeRepository creditTypeRepository;
     private final ClientRepository clientRepository;
 
     public List<CreditApplication> getAllCreditApplication(){
@@ -52,5 +55,9 @@ public class CreditApplicationService {
         Client client = clientRepository.findClientByRfc(verifyClientRequest.getRfc()).get();
         boolean isNotRegularClient = creditApplicationRepository.existsCreditApplicationByCreditApplicantAndStatus(client, CreditApplicationStatus.ACTIVE);
         return new VerifyRegularClientResponse(!isNotRegularClient);
+    }
+
+    public CreditType getCreditTypeById(Integer id) {
+        return creditTypeRepository.getCreditTypeByCreditTypeId(id);
     }
 }

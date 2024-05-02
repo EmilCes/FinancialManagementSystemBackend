@@ -1,5 +1,6 @@
 package com.softdev.fmsb.creditApplication.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.credit.model.Credit;
@@ -44,6 +45,7 @@ public class CreditApplication {
     private Credit credit;
 
     @OneToMany(cascade = CascadeType.ALL ,mappedBy = "creditApplication")
+    @JsonBackReference
     private List<Reference> references;
 
     // Evitar que se serialice la referencia a CreditType
