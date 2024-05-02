@@ -56,6 +56,7 @@ public class CreditService {
     public void validateCreditApplication(ValidateCreditApplicationRequest validateCreditApplicationRequest) {
 
         boolean notDeniedPolitics = validateCreditApplicationRequest.getRejectedPolicies().isEmpty();
+        System.out.println(notDeniedPolitics);
 
         Optional<CreditApplication> optionalCreditApplication = creditApplicationRepository.findById(validateCreditApplicationRequest.getCreditApplicationId());
         Optional<User> user = userRepository.findById(validateCreditApplicationRequest.getUserId());

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Console;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,7 @@ public class CreditController {
     @PostMapping("/")
     public ResponseEntity<?> validateCreditApplication(@RequestBody ValidateCreditApplicationRequest validateCreditApplicationRequest) {
         try{
+            System.out.println(validateCreditApplicationRequest.getComments());
             creditService.validateCreditApplication(validateCreditApplicationRequest);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
