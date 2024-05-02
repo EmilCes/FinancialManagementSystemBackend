@@ -23,6 +23,8 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+    private String rfc;
+    private String userNumber;
     private boolean mfaEnabled;
     private String secret;
     private String changePasswordCode;
@@ -30,7 +32,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Token> tokens;
 
     @Override
