@@ -49,4 +49,16 @@ public class CreditTypeController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/modify")
+    public ResponseEntity<?> modifyCredit(@RequestBody CreditType creditType){
+        try{
+            creditTypeService.modifyCredit(creditType);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            //TODO: Log exception
+            System.out.println(e.getMessage() + "\n" + e.getStackTrace());
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

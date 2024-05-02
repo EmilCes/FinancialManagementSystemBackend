@@ -43,6 +43,21 @@ public class CreditApplicationController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCreditAplicationById(@PathVariable Integer id) {
+        try {
+            CreditApplication response = creditApplicationService.getCreditAplicationById(id);
+            if (response != null) {
+                return ResponseEntity.ok(response);
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/regularClient")
     public ResponseEntity<?> getIsRegularClient(VerifyClientRequest verifyClientRequest) {
         try {

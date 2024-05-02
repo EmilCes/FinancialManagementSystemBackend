@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,10 @@ public class CreditApplicationService {
         return creditApplicationRepository.findAll();
     }
 
+    public CreditApplication getCreditAplicationById(Integer id) {
+        Optional<CreditApplication> optionalCreditApplication = creditApplicationRepository.findById(id);
+        return optionalCreditApplication.orElse(null);
+    }
     public void createCreditApplication(CreditApplication creditApplication) {
         CreditApplication savedCreditApplication = creditApplicationRepository.save(creditApplication);
         List<Reference> references = savedCreditApplication.getReferences();
