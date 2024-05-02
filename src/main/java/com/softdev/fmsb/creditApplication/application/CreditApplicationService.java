@@ -2,6 +2,7 @@ package com.softdev.fmsb.creditApplication.application;
 
 import com.softdev.fmsb.client.infraestructure.ClientRepository;
 import com.softdev.fmsb.client.model.Client;
+import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.creditApplication.infraestructure.CreditApplicationRepository;
 import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyClientRequest;
 import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClientResponse;
@@ -25,6 +26,12 @@ public class CreditApplicationService {
     private final ClientRepository clientRepository;
 
     public List<CreditApplication> getAllCreditApplication(){
+        List<CreditApplication> creditsApplications = creditApplicationRepository.findAll();
+
+        for(CreditApplication creditApplication: creditsApplications){
+            creditApplication.setCredit(null);
+        }
+
         return creditApplicationRepository.findAll();
     }
 
