@@ -45,7 +45,6 @@ public class CreditApplication {
     private Credit credit;
 
     @OneToMany(cascade = CascadeType.ALL ,mappedBy = "creditApplication")
-    @JsonBackReference
     private List<Reference> references;
 
     @ManyToOne(cascade = CascadeType.ALL)
