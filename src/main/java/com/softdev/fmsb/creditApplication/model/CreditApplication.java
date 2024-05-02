@@ -48,8 +48,6 @@ public class CreditApplication {
     @JsonBackReference
     private List<Reference> references;
 
-    // Evitar que se serialice la referencia a CreditType
-    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "creditTypeId", referencedColumnName = "creditTypeId")
     private CreditType selectedCredit;
