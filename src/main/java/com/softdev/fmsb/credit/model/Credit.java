@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,9 +20,9 @@ public class Credit {
     @Id
     @GeneratedValue
     private Integer creditId;
-
-
-    // Here your attributes
+    private Date startDate;
+    private Date endDate;
+    private CreditStatus status;
 
     @OneToOne
     @JoinColumn(name = "creditApplicationId")
