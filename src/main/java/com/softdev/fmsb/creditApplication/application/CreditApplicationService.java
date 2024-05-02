@@ -7,6 +7,7 @@ import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyClientReques
 import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClientResponse;
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
+import com.softdev.fmsb.creditApplication.model.Reference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +25,20 @@ public class CreditApplicationService {
     }
 
     public void createCreditApplication(CreditApplication creditApplication) {
-        creditApplicationRepository.save(creditApplication);
+        CreditApplication savedCreditApplication = creditApplicationRepository.save(creditApplication);
+        List<Reference> references = savedCreditApplication.getReferences();
+
+        for (Reference reference : references) {
+            reference.setCreditApplication(savedCreditApplication);
+        }
+
+        savedCreditApplication.setReferences(references);
+
+        creditApplicationRepository.save(savedCreditApplication);
+
+
     }
+
 
     public Client getClientByRfc(String rfc){
         Client client = clientRepository.findClientByRfc(rfc).get();
