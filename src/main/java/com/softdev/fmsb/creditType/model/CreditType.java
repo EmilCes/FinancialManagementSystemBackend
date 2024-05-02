@@ -1,6 +1,6 @@
 package com.softdev.fmsb.creditType.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.softdev.fmsb.politics.model.Politic;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,13 +27,14 @@ public class CreditType {
     private String term;
     private float iva;
 
+    // Evitar que se serialice la lista de políticas
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "CreditTypes_Politics",
             joinColumns = @JoinColumn(name = "creditTypeId"),
             inverseJoinColumns = @JoinColumn(name = "politicId")
     )
-    @JsonIgnoreProperties("creditTypes")
     private List<Politic> politics;
 
 }
