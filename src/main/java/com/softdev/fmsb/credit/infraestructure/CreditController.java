@@ -3,6 +3,7 @@ package com.softdev.fmsb.credit.infraestructure;
 import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.credit.application.CreditService;
 import com.softdev.fmsb.credit.model.Credit;
+import com.softdev.fmsb.credit.model.CreditByIdResponse;
 import com.softdev.fmsb.credit.model.CreditResponse;
 import com.softdev.fmsb.credit.model.ValidateCreditApplicationRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,17 @@ public class CreditController {
     public ResponseEntity<?> getCredits() {
         try{
             List<CreditResponse> response = creditService.getCredits();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            //TODO: Log exception
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCredits(@PathVariable int id) {
+        try{
+            CreditByIdResponse response = creditService.getCreditsById(id);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             //TODO: Log exception

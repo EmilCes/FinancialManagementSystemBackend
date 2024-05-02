@@ -2,12 +2,14 @@ package com.softdev.fmsb.credit.application;
 
 import com.softdev.fmsb.auth.infraestructure.UserRepository;
 import com.softdev.fmsb.auth.model.User;
+import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.credit.infraestructure.CreditRepository;
 import com.softdev.fmsb.credit.infraestructure.DictumRepository;
 import com.softdev.fmsb.credit.model.*;
 import com.softdev.fmsb.creditApplication.infraestructure.CreditApplicationRepository;
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
+import com.softdev.fmsb.creditType.model.CreditType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +38,6 @@ public class CreditService {
         List<CreditResponse> creditResponses = new ArrayList<>();
 
         for (Credit credit : credits) {
-
             CreditResponse creditResponse = CreditResponse.builder()
                     .creditId(credit.getCreditId())
                     .clientRfc(credit.getCreditApplication().getCreditApplicant().getRfc())
@@ -94,5 +95,22 @@ public class CreditService {
         java.util.Date utilDate = new java.util.Date();
 
         return new Date(utilDate.getTime());
+    }
+
+    public CreditByIdResponse getCreditsById(int creditId) {
+
+        Credit credit = creditRepository.findById(creditId).get();
+        CreditType creditType = credit.getCreditApplication().getSelectedCredit();
+        CreditApplication creditApplication = credit.getCreditApplication();
+        Client client = creditApplication.getCreditApplicant();
+
+
+        return CreditByIdResponse.builder()
+                .creditNumber(creditId)
+                .amountBorrowed("80,000")
+                .clientName(client.getName() + client.getLastname())
+                .term(creditType.getTerm())
+                .creditType(creditType.getDescription())
+                .build();
     }
 }
