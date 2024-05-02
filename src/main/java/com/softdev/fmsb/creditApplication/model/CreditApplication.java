@@ -1,7 +1,10 @@
 package com.softdev.fmsb.creditApplication.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.softdev.fmsb.client.model.Address;
 import com.softdev.fmsb.client.model.Client;
+import com.softdev.fmsb.credit.model.Credit;
+import com.softdev.fmsb.credit.model.Dictum;
 import com.softdev.fmsb.creditType.model.CreditType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +34,14 @@ public class CreditApplication {
 
     @Temporal(TemporalType.DATE)
     private Date dateOfApplication;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "dictumId", referencedColumnName = "dictumId")
+    private Dictum dictum;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "creditId", referencedColumnName = "creditId")
+    private Credit credit;
 
     @OneToMany(cascade = CascadeType.ALL ,mappedBy = "creditApplication")
     @JsonManagedReference
