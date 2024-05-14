@@ -24,8 +24,10 @@ public class CreditType {
     private String description;
     private float interestRate;
     private CreditState state;
-    private String term;
+    private int term;
     private float iva;
+    private float amount;
+    private TermType termType;
 
     @ManyToMany
     @JoinTable(

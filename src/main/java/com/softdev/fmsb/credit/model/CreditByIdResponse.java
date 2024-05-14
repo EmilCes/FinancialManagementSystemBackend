@@ -15,6 +15,6 @@ public class CreditByIdResponse {
     private String clientName;
     private String creditType;
     private String amountBorrowed;
-    private String term;
+    private int term;
     private Integer creditNumber;
 }

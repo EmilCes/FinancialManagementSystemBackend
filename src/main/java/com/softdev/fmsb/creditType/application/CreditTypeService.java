@@ -32,6 +32,8 @@ public class CreditTypeService {
         creditTypeInBD.get().setTerm(creditType.getTerm());
         creditTypeInBD.get().setIva(creditType.getIva());
         creditTypeInBD.get().setPolitics(creditType.getPolitics());
+        creditTypeInBD.get().setAmount(creditType.getAmount());
+        creditTypeInBD.get().setTermType(creditType.getTermType());
         creditTypeRepository.save(creditTypeInBD.get());
     }
 
