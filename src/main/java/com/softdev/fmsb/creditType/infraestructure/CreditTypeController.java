@@ -44,8 +44,6 @@ public class CreditTypeController {
             creditTypeService.registerCredit(creditType);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            //TODO: Log exception
-            System.out.println(e.getMessage() + "\n" + e.getStackTrace());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -57,7 +55,6 @@ public class CreditTypeController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             //TODO: Log exception
-            System.out.println(e.getMessage() + "\n" + e.getStackTrace());
             return ResponseEntity.badRequest().build();
         }
     }
