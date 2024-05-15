@@ -1,6 +1,5 @@
 package com.softdev.fmsb.creditApplication.infraestructure;
 
-import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.creditApplication.application.CreditApplicationService;
 import com.softdev.fmsb.creditApplication.infraestructure.dto.CreditApplicationRequest;
 import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyClientRequest;
@@ -8,8 +7,6 @@ import com.softdev.fmsb.creditApplication.infraestructure.dto.VerifyRegularClien
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
 import com.softdev.fmsb.creditApplication.model.Reference;
-import com.softdev.fmsb.creditType.infraestructure.CreditTypeRepository;
-import com.softdev.fmsb.creditType.model.CreditType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -92,7 +89,7 @@ public class CreditApplicationController {
         CreditApplication creditApplication = new CreditApplication();
 
         String clientRfc = creditApplicationRequest.getClientRfc();
-        int creditTypeId = creditApplicationRequest.getIdCreditType();
+        int creditTypeId = creditApplicationRequest.getSelectedCredit().getCreditTypeId();
         Date actualDate = new Date();
 
         List<Reference> references = new ArrayList<>();

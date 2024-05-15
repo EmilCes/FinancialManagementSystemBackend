@@ -31,7 +31,7 @@ public class CreditController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getCredits/{id}")
     public ResponseEntity<?> getCredits(@PathVariable int id) {
         try{
             CreditByIdResponse response = creditService.getCreditsById(id);
