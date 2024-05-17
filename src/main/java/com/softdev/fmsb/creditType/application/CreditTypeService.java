@@ -1,10 +1,12 @@
 package com.softdev.fmsb.creditType.application;
 
+import com.softdev.fmsb.client.model.Client;
 import com.softdev.fmsb.creditType.infraestructure.CreditTypeRepository;
 import com.softdev.fmsb.creditType.model.CreditState;
 import com.softdev.fmsb.creditType.model.CreditType;
 import com.softdev.fmsb.politics.model.Politic;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,16 +27,14 @@ public class CreditTypeService {
     }
 
     public void modifyCredit(CreditType creditType){
-        Optional<CreditType> creditTypeInBD= creditTypeRepository.findById(creditType.getCreditTypeId());
-        creditTypeInBD.get().setDescription(creditType.getDescription());
-        creditTypeInBD.get().setInterestRate(creditType.getInterestRate());
-        creditTypeInBD.get().setState(creditType.getState());
-        creditTypeInBD.get().setTerm(creditType.getTerm());
-        creditTypeInBD.get().setIva(creditType.getIva());
-        creditTypeInBD.get().setPolitics(creditType.getPolitics());
-        creditTypeInBD.get().setAmount(creditType.getAmount());
-        creditTypeInBD.get().setTermType(creditType.getTermType());
-        creditTypeRepository.save(creditTypeInBD.get());
+
+        Optional<CreditType> optionalCreditType = creditTypeRepository.findById(creditType.getCreditTypeId());
+
+        if (optionalCreditType.isPresent()) {
+            CreditType existingCreditType = optionalCreditType.get();
+            BeanUtils.copyProperties(creditType, existingCreditType, "creditTypeId");
+            creditTypeRepository.save(existingCreditType);
+        }
     }
 
 

@@ -40,7 +40,6 @@ public class CreditTypeController {
     @PostMapping("/register")
     public ResponseEntity<?> registerCredit(@RequestBody CreditType creditType){
         try{
-            System.out.println("hola");
             creditTypeService.registerCredit(creditType);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

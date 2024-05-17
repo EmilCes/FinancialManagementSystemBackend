@@ -45,9 +45,9 @@ public class ClientService {
         Optional<Client> optionalClient = clientRepository.findById(id);
 
         if (optionalClient.isPresent()) {
-            Client existedClient = optionalClient.get();
-            BeanUtils.copyProperties(clientUpdated, existedClient, "clientId", "rfc");
-            clientRepository.save(existedClient);
+            Client existingClient = optionalClient.get();
+            BeanUtils.copyProperties(clientUpdated, existingClient, "clientId", "rfc");
+            clientRepository.save(existingClient);
         }
 
         return optionalClient.orElse(null);
