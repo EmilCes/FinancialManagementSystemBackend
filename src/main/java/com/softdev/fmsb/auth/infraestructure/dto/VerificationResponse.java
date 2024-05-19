@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class VerificationResponse {
 
+    private int id;
     private String firstName;
     private String lastName;
     private String accessToken;

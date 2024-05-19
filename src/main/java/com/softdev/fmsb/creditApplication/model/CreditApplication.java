@@ -31,6 +31,10 @@ public class CreditApplication {
     private String identificationPdfPath;
     private String proofOfAddressPdfPath;
     private String proofOfIncomePdfPath;
+    private byte[] identificationPdf;
+    private byte[] proofOfIncomePdf;
+    private byte[] proofOfAddressPdf;
+
     private int idCreditType;
 
     @Temporal(TemporalType.DATE)
