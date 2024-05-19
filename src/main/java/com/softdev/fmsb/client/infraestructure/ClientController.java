@@ -62,6 +62,8 @@ public class ClientController {
             return ResponseEntity.ok(verifyClientExistenceResponse);
         } catch (Exception e) {
             //TODO: Log exception
+            e.printStackTrace();
+
             return ResponseEntity.badRequest().build();
         }
     }
