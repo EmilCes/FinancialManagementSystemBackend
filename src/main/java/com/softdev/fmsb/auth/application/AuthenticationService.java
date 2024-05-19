@@ -197,6 +197,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
 
         return VerificationResponse.builder()
+                .id(user.getUserId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .accessToken(jwtToken)

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,11 +35,39 @@ public class CreditApplicationController {
     @GetMapping("/")
     public ResponseEntity<?> getAllCreditsApplications() {
         try {
-            List<CreditApplication> response = creditApplicationService.getAllCreditApplication();
-            return ResponseEntity.ok(response);
+            List<CreditApplication> creditApplications = creditApplicationService.getAllCreditApplication();
+
+            // Cargar los PDFs en cada CreditApplication
+            for (CreditApplication creditApplication : creditApplications) {
+                creditApplication.setIdentificationPdf(loadPdf(creditApplication.getIdentificationPdfPath()));
+                creditApplication.setProofOfIncomePdf(loadPdf(creditApplication.getProofOfIncomePdfPath()));
+                creditApplication.setProofOfAddressPdf(loadPdf(creditApplication.getProofOfAddressPdfPath()));
+            }
+
+            return ResponseEntity.ok(creditApplications);
         } catch (Exception e) {
-            //TODO: Log exception
+            // TODO: Log exception
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private byte[] loadPdf(String filePath) {
+        if (filePath == null || filePath.equals("error")) {
+            return null;
+        }
+
+        try {
+            File file = new File(filePath);
+            if (!file.exists()) {
+                return null;
+            }
+
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            // TODO: Log exception
+            e.printStackTrace();
+            return null;
         }
     }
 
