@@ -128,6 +128,7 @@ public class PaymentService {
             paymentCredit.setLeftAmount(paymentCredit.getLeftAmount() - payment.getAmount());
 
             if (paymentCredit.getLeftAmount() <= 0){
+                paymentCredit.setEndDate(new Date());
                 paymentCredit.setStatus(CreditStatus.FINISHED);
             }
 

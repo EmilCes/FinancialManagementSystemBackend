@@ -10,7 +10,5 @@ import java.util.List;
 public interface CreditTypeRepository extends JpaRepository<CreditType, Integer> {
     List<CreditType> getCreditTypesByState (CreditState creditState);
 
-    CreditType getCreditTypeByCreditTypeId (CreditType creditType);
-
     CreditType getCreditTypeByCreditTypeId (Integer id);
 }
