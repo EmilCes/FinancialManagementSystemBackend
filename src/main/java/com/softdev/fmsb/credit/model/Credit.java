@@ -23,6 +23,7 @@ public class Credit {
     private Date startDate;
     private Date endDate;
     private CreditStatus status;
+    private float leftAmount;
 
     @OneToOne
     @JoinColumn(name = "creditApplicationId")

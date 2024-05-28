@@ -1,5 +1,6 @@
 package com.softdev.fmsb.creditType.infraestructure;
 
+import com.softdev.fmsb.credit.model.Credit;
 import com.softdev.fmsb.creditType.model.CreditState;
 import com.softdev.fmsb.creditType.model.CreditType;
 import org.springframework.data.jpa.repository.JpaRepository;

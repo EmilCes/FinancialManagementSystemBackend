@@ -9,6 +9,7 @@ import com.softdev.fmsb.credit.model.*;
 import com.softdev.fmsb.creditApplication.infraestructure.CreditApplicationRepository;
 import com.softdev.fmsb.creditApplication.model.CreditApplication;
 import com.softdev.fmsb.creditApplication.model.CreditApplicationStatus;
+import com.softdev.fmsb.creditType.infraestructure.CreditTypeRepository;
 import com.softdev.fmsb.creditType.model.CreditType;
 import com.softdev.fmsb.politics.infraestructure.PoliticRepository;
 import com.softdev.fmsb.politics.model.Politic;
@@ -32,6 +33,7 @@ public class CreditService {
     private final DictumRepository dictumRepository;
     private final PoliticRepository politicRepository;
     private final CreditApplicationRepository creditApplicationRepository;
+    private final CreditTypeRepository creditTypeRepository;
     private final UserRepository userRepository;
 
 
@@ -66,6 +68,8 @@ public class CreditService {
         Optional<User> optionalUser = userRepository.findById(validateCreditApplicationRequest.getUserId());
 
         if (optionalCreditApplication.isPresent() && optionalUser.isPresent()) {
+            Optional<CreditType> optionalCreditType = creditTypeRepository.findById(optionalCreditApplication.get().getIdCreditType());
+            CreditType creditType = optionalCreditType.get();
             CreditApplication creditApplication = optionalCreditApplication.get();
             User user = optionalUser.get();
 
@@ -92,6 +96,7 @@ public class CreditService {
                         .startDate(new Date())
                         .status(CreditStatus.ACTIVE)
                         .creditApplication(creditApplication)
+                        .leftAmount(getLeftAmount(creditType))
                         .build();
                 Credit creditRegistered = creditRepository.save(credit);
 
@@ -109,6 +114,13 @@ public class CreditService {
         }
     }
 
+    private float getLeftAmount(CreditType creditType){
+        float ivaAmount = creditType.getAmount() * creditType.getIva();
+        float interestAmount = creditType.getAmount() * creditType.getInterestRate();
+        float leftAmount = creditType.getAmount() + ivaAmount + interestAmount;
+
+        return leftAmount;
+    }
 
 
     private static Date getCurrentDate() {
