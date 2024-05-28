@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface CreditRepository extends JpaRepository<Credit, Integer> {
 
-
     List<Credit> getCreditByCreditApplication_CreditApplicant_Rfc(String rfc);
 
 }

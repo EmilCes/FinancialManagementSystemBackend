@@ -43,7 +43,8 @@ public class SecurityConfig {
             "/api/v1/creditApplication/**",
             "/api/v1/worker/**",
             "/api/v1/credit/**",
-            "api/v1/payment-layout/**"
+            "api/v1/payment-layout/**",
+            "api/v1/payment/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
