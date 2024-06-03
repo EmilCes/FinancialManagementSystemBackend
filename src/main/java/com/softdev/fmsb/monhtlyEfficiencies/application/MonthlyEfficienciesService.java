@@ -53,12 +53,12 @@ public class MonthlyEfficienciesService {
                 for (int i = 0; i < termsLeftThisYear && i < 12; i++) {
 
                     if(credit.getStartDate().getMonth() < i + 1 && credit.getStartDate().getYear() + 1900 == year){
-                        monthResponses.get(i).setActualAmount(getActualAmount(credit, january.plus(i), year));
-                        monthResponses.get(i).setExpectedAmount(totalCreditAmount / term);
+                        monthResponses.get(i).setActualAmount(monthResponses.get(i).getActualAmount() + getActualAmount(credit, january.plus(i), year));
+                        monthResponses.get(i).setExpectedAmount(monthResponses.get(i).getExpectedAmount() + (totalCreditAmount / term));
                     }
                     if(credit.getStartDate().getYear() + 1900 < year){
-                        monthResponses.get(i).setActualAmount(getActualAmount(credit, january.plus(i), year));
-                        monthResponses.get(i).setExpectedAmount(totalCreditAmount / term);
+                        monthResponses.get(i).setActualAmount(monthResponses.get(i).getActualAmount() + getActualAmount(credit, january.plus(i), year));
+                        monthResponses.get(i).setExpectedAmount(monthResponses.get(i).getExpectedAmount() + (totalCreditAmount / term));
                     }
                 }
             }
